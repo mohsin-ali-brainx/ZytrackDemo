@@ -1,0 +1,98 @@
+<resources>
+    <string name="app_name">Zytrack Demo</string>
+    <string name="user_name">User Name:</string>
+    <string name="please_enter_full_name">Please enter full name</string>
+    <string name="image" translatable="false">image</string>
+    <string name="login_to_zytrack">Log In to Zytrack!</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="password">Password</string>
+    <string name="show" translatable="false">Show</string>
+    <string name="hide" translatable="false">Hide</string>
+    <string name="remember_me">Remember me</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="login">Log In</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="back_to_log_in">Back to Log In</string>
+    <string name="email_sent">Email Sent</string>
+    <string name="email_sent_link">We have sent you email with password reset link!</string>
+    <string name="contact_support"><u>Contact Support</u>.</string>
+    <string name="account_blocked">Account Blocked</string>
+    <string name="blocked_account_desc">Your account is no longer active, please contact support team for more information.</string>
+    <string name="home" translatable="false">Home</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="timer">Timer</string>
+    <string name="today_9_feb_2021" translatable="false">Today 9 Feb 2021</string>
+    <string name="start_tracking">Start Tracking</string>
+    <string name="stop_tracking">Stop Tracking</string>
+    <string name="start_break">Start Break</string>
+    <string name="stop_break">Stop Break</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="client">Client</string>
+    <string name="project">Project</string>
+    <string name="type_of_work_hours">Type of Work Hours</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="today">Today </string>
+    <string name="gps_tracking">GPS Tracking</string>
+    <string name="timer_sheet">Time Sheet</string>
+    <string name="reports">Reports</string>
+    <string name="settings">Settings</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="save_msg">Are you sure you want to save?</string>
+    <string name="del_msg">Are you sure you want to delete?</string>
+    <string name="logout">Logout</string>
+    <string name="not_selected">Please Select</string>
+    <string name="select">Select</string>
+    <string name="search">Search</string>
+    <string name="total_hours">Total Hours</string>
+    <string name="add_new_entry">Add New Entry</string>
+    <string name="no_details_available">No Details Available</string>
+    <string name="mon" translatable="false">MON</string>
+    <string name="tue" translatable="false">TUE</string>
+    <string name="wed" translatable="false">WED</string>
+    <string name="thu" translatable="false">THU</string>
+    <string name="fri" translatable="false">FRI</string>
+    <string name="sat" translatable="false">SAT</string>
+    <string name="sun" translatable="false">SUN</string>
+    <string name="time_entry_details">Time Entry Details</string>
+    <string name="edit">Edit</string>
+    <string name="basic_details">Basic Details</string>
+    <string name="date">Date</string>
+    <string name="work_time">Work Time</string>
+    <string name="break_time">Break Time</string>
+    <string name="note">Note</string>
+    <string name="ok">Ok</string>
+    <string name="write_note">Write Note</string>
+    <string name="add_work">Add Work</string>
+    <string name="add_break">Add Break</string>
+    <string name="work_start">Work Start</string>
+    <string name="work_end">Work End</string>
+    <string name="break_start">Break Start</string>
+    <string name="break_end">Break End</string>
+    <string name="total">Total </string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="total_00_00_00" translatable="false">Total 00:00:00</string>
+    <string name="select_client">Please Select Client</string>
+    <string name="select_project">Please Select Project</string>
+    <string name="select_work_type">Please Select Type of Hours</string>
+    <string name="working_time">Working Time</string>
+    <string name="no_notes" translatable="false">No Notes Available</string>
+    <string name="edit_new_entry">Edit Entry</string>
+    <string name="select_date">Please Select Date</string>
+    <string name="session_timeout">Session Expired</string>
+    <string name="empty_time">Please enter time</string>
+    <string name="duplicate_time">You cannot add a duplicate time</string>
+    <string name="no_internet">Internet Unavailable</string>
+    <string name="work_time_started" translatable="false">Work Time Started</string>
+    <string name="break_time_started" translatable="false">Break Time Started</string>
+    <string name="work_time_started_at">Work time started at </string>
+    <string name="break_time_started_at">Break time started at </string>
+    <string name="unknown_client">Unknown Client</string>
+    <string name="unknown_project">Unknown Project</string>
+    <string name="duration">Duration</string>
+</resources>

@@ -1,0 +1,75 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Zytrack_Demo" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+        <item name="colorPrimary">@color/theme_color</item>
+        <item name="colorPrimaryVariant">@color/light_theme_color</item>
+        <item name="colorOnPrimary">@color/white_color</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/dark_theme_color</item>
+        <item name="colorSecondaryVariant">@color/dark_theme_color</item>
+        <item name="colorOnSecondary">@color/black_color</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/white_color</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <item name="android:windowBackground">@color/white_color</item>
+    </style>
+
+    <style name="getStartedTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/white_color</item>
+        <item name="colorPrimaryDark">@color/white_color</item>
+        <item name="colorAccent">@color/theme_color</item>
+        <item name="android:textColor">@android:color/black</item>
+
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+    </style>
+
+    <style name="CustomProgressBarTheme">
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+
+    </style>
+
+    <style name="DefaultNumberPickerTheme" parent="Theme.Zytrack_Demo">
+        <item name="colorControlNormal">@color/black_color</item>
+    </style>
+
+    <style name="CardTheme" parent="Theme.MaterialComponents.Bridge">
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+
+    <style name="BrownStd_Regular">
+        <item name="android:fontFamily">@font/brownstd_regular</item>
+    </style>
+
+    <style name="BrownStd_Bold">
+        <item name="android:fontFamily">@font/brownstd_bold</item>
+    </style>
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/theme_color</item>
+        <item name="android:textColorPrimary">@color/theme_color</item>
+    </style>
+
+    <style name="DatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/theme_color</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/DatePickerButtonStyle</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/DatePickerButtonStyle</item>
+    </style>
+
+    <style name="DatePickerButtonStyle" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/theme_color</item>
+        <item name="android:backgroundTint">@color/white_color</item>
+    </style>
+    <style name="progressBarThemeColor" parent="@style/Theme.AppCompat">
+        <item name="colorAccent">@color/theme_color</item>
+    </style>
+</resources>

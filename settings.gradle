@@ -1,0 +1,4 @@
+include ':BxAndroidExt'
+include ':app'
+include ':BxAndroidBase'
+rootProject.name = "Zytrack_Demo"
