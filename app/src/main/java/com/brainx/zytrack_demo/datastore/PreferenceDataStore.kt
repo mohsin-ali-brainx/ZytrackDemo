@@ -3,7 +3,7 @@ package com.brainx.zytrack_demo.datastore
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
-import androidx.datastore.preferences.createDataStore
+import androidx.datastore.preferences.preferencesDataStore
 import com.brainx.zytrack_demo.models.UserModel
 import com.brainx.zytrack_demo.utils.ZytrackConstant
 import com.brainx.zytrack_demo.utils.replaceBrackets
@@ -12,7 +12,6 @@ import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
@@ -20,57 +19,61 @@ import javax.inject.Singleton
 
 @Singleton
 class PreferenceDataStore @Inject constructor(@ApplicationContext val context: Context) {
+
     companion object {
         const val PREFERENCE_NAME = "Zytrack_Demo"
-        val IS_LOGIN_PREF_KEY = preferencesKey<Boolean>("isLogin")
-        val USER_PREF_KEY = preferencesKey<String>("userData")
-        val CLIENT_PREF_KEY = preferencesKey<String>("client")
-        val ACCESS_TOKEN_PREF_KEY = preferencesKey<String>("access_token")
-        val UID_PREF_KEY = preferencesKey<String>("uid")
+        val IS_LOGIN_PREF_KEY = booleanPreferencesKey("isLogin")
+        val USER_PREF_KEY = stringPreferencesKey("userData")
+        val CLIENT_PREF_KEY = stringPreferencesKey("client")
+        val ACCESS_TOKEN_PREF_KEY = stringPreferencesKey("access_token")
+        val UID_PREF_KEY = stringPreferencesKey("uid")
+
     }
 
-    private val datastore: DataStore<Preferences> = context.createDataStore(
-        name = PREFERENCE_NAME
-    )
+    // creating datastore
+    val Context.datastore: DataStore<Preferences> by preferencesDataStore(name = PREFERENCE_NAME)
 
+    // clearing complete preference datastore
     suspend fun clearPreferenceDataStore(response: (Boolean) -> Unit) {
-        datastore.edit {
+        context.datastore.edit {
             it.clear()
             response(true)
         }
     }
 
+    // clearing a single preference using key
     suspend fun clearPreferenceDataStoreKey(prefKey: Preferences.Key<Any>) {
-        datastore.edit {
+        context.datastore.edit {
             it.remove(prefKey)
         }
     }
 
     suspend fun isLogin(isLogin: Boolean) {
-        datastore.edit {
+        context.datastore.edit {
             it[IS_LOGIN_PREF_KEY] = isLogin
         }
     }
 
+    val isLogin:Flow<Boolean> = context.datastore.data.catch { exception ->
+        if (exception is IOException) {
+            emit(emptyPreferences())
+        } else {
+            throw exception
+        }
+    }.map {
+        val isLoggedIn = it[IS_LOGIN_PREF_KEY] ?: false
+        isLoggedIn
+    }
+
     suspend fun headers(token: String, client: String, uid: String) {
-        datastore.edit {
+        context.datastore.edit {
             it[ACCESS_TOKEN_PREF_KEY] = token
             it[CLIENT_PREF_KEY] = client
             it[UID_PREF_KEY] = uid
         }
     }
 
-    suspend fun userData(userModel: String) {
-        val userData = userModel?.replaceBrackets()
-        userData?.let {
-            datastore.edit { prefrence ->
-                prefrence[USER_PREF_KEY] = it
-            }
-        }
-    }
-
-    // reading values can be done by 3 methods
-    val header: Flow<Map<String, String>> = datastore.data.catch { exception ->
+    val header: Flow<Map<String, String>> = context.datastore.data.catch { exception ->
         if (exception is IOException) {
             emit(emptyPreferences())
         } else {
@@ -88,32 +91,25 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext val context: C
         } as HashMap<String, String>
     }
 
-    suspend fun isLogin(): Boolean? {
-        val preferences = datastore.data.first()
-        return preferences[IS_LOGIN_PREF_KEY] ?: false
+    suspend fun userData(userModel: String) {
+        val userData = userModel?.replaceBrackets()
+        userData?.let {
+            context.datastore.edit { prefrence ->
+                prefrence[USER_PREF_KEY] = it
+            }
+        }
     }
 
-    val isUserLoggedIn: Flow<Boolean> = datastore.data.catch { exception ->
+    val userData: Flow<UserModel?> = context.datastore.data.catch { exception ->
         if (exception is IOException) {
             emit(emptyPreferences())
         } else {
             throw exception
         }
     }.map {
-        val isLoggedIn = it[IS_LOGIN_PREF_KEY] ?: false
-        isLoggedIn
+        val user = it[USER_PREF_KEY] ?: null
+        val model = Gson().fromJson(user?.toJsonString(), UserModel::class.java)
+        model
     }
 
-    val isLogin: Flow<Boolean>
-        get() = datastore.data.map {
-            val isLoggedIn = it[IS_LOGIN_PREF_KEY] ?: false
-            isLoggedIn
-        }
-
-    val userData: Flow<UserModel?>
-        get() = datastore.data.map {
-            val user = it[USER_PREF_KEY] ?: null
-            val model = Gson().fromJson(user?.toJsonString(), UserModel::class.java)
-            model
-        }
 }

@@ -64,7 +64,7 @@ class SplashActivity : BxBaseSplashActivity<SplashViewModel, ActivitySplashBindi
     }
 
     private fun checkUserSession() {
-        preferenceDataStore.isUserLoggedIn.asLiveData().observe(this@SplashActivity, {
+        preferenceDataStore.isLogin.asLiveData().observe(this@SplashActivity, {
             isUserLoggedIn = it
             moveToNewScreen(it)
         })

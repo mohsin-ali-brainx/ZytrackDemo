@@ -75,7 +75,7 @@ abstract class BaseActivity<VM : ViewModel, VB : ViewDataBinding> : BxBaseActivi
     // end region
     // region private methods
     private fun checkUserSession() {
-        preferenceDataStore.isUserLoggedIn.asLiveData().observe(this, {
+        preferenceDataStore.isLogin.asLiveData().observe(this, {
             isUserLoggedIn = it
         })
     }
