@@ -18,6 +18,7 @@ import com.brainx.zytrack_demo.datastore.PreferenceDataStore
 import com.brainx.zytrack_demo.models.UserModel
 import com.brainx.zytrack_demo.repository.AuthRepository
 import com.brainx.zytrack_demo.utils.ZytrackConstant
+import com.brainx.zytrack_demo.utils.replaceBrackets
 import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +35,7 @@ class LoginViewModel @ViewModelInject constructor(
     var showPassword: ObservableBoolean = ObservableBoolean(false)
     var isAccountBlocked = MutableLiveData<Boolean>(false)
     var isUserLoggedIn = MutableLiveData<Boolean>(false)
-    var activityContext: Activity?=null
+    var activityContext: Activity? = null
     // end region
 
     //region public method
@@ -62,7 +63,7 @@ class LoginViewModel @ViewModelInject constructor(
 
     //region private method
     private fun signInApi() {
-        var isLogin:Boolean=false
+        var isLogin: Boolean = false
         showProcessingLoader()
         viewModelScope.launch(Dispatchers.IO) {
             ZytrackConstant.apply {
@@ -72,9 +73,9 @@ class LoginViewModel @ViewModelInject constructor(
                     device_token = DEVICE_TOKEN_VALUE
                 )
                 authRepository.signIn(
-                    user, { userModel, status , token, client,uid->
+                    user, { userModel, status, token, client, uid ->
                         if (status) {
-                            isLogin=status
+                            isLogin = status
                             setUserDetails(userModel, isLogin, token, client, uid)
                         }
                     }, {
@@ -88,26 +89,29 @@ class LoginViewModel @ViewModelInject constructor(
     }
 
     private fun setUserDetails(
-        user:UserModel?,
-        isLogin:Boolean,
-        token:String?,
-        client:String?,
-        uid:String?){
+        user: UserModel?,
+        isLogin: Boolean,
+        token: String?,
+        client: String?,
+        uid: String?
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             preferenceDataStore.apply {
-                token?.let {token->
-                    client?.let { client->
-                        uid?.let { uid->
-                            headers(token,client,uid)
+                token?.let { token ->
+                    client?.let { client ->
+                        uid?.let { uid ->
+                            headers(token, client, uid)
                         }
                     }
                 }
-                isLogin(isLogin,{
-                    if (it){
+                isLogin(isLogin, {
+                    if (it) {
                         this@LoginViewModel.isUserLoggedIn.postValue(true)
                         hideProcessingLoader()
                     }
                 })
+
+                user?.toJson()?.replaceBrackets()?.let { userData(it) }
 
             }
         }
@@ -118,7 +122,7 @@ class LoginViewModel @ViewModelInject constructor(
             if (errCode == ZytrackConstant.BLOCKED_ERROR_CODE)
                 isAccountBlocked.postValue(true)
             else
-                showError(this,activityContext)
+                showError(this, activityContext)
         }
     }
 

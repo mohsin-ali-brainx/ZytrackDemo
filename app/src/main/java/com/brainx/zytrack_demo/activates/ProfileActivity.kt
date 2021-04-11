@@ -11,6 +11,7 @@ import com.brainx.zytrack_demo.base.BaseActivity
 import com.brainx.zytrack_demo.databinding.ActivityLoginBinding
 import com.brainx.zytrack_demo.databinding.ActivityProfileBinding
 import com.brainx.zytrack_demo.models.UserModel
+import com.brainx.zytrack_demo.utils.toJsonString
 import com.brainx.zytrack_demo.viewModels.LoginViewModel
 import com.brainx.zytrack_demo.viewModels.ProfileViewModel
 import com.google.gson.Gson
@@ -45,7 +46,7 @@ class ProfileActivity : BaseActivity<ProfileViewModel, ActivityProfileBinding>()
 
     private fun readUserData(){
         preferenceDataStore.userData.asLiveData().observe(this,{
-            val userModel = Gson().fromJson(it, UserModel::class.java)
+            val userModel = Gson().fromJson(it?.toJsonString(), UserModel::class.java)
             mViewModel.user.set(userModel)
         })
     }

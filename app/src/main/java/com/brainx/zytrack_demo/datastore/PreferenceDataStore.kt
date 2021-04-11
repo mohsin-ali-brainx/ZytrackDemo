@@ -15,10 +15,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class PreferenceDataStore @Inject constructor(@ApplicationContext val context: Context){
+class PreferenceDataStore @Inject constructor(@ApplicationContext val context: Context) {
     companion object {
         const val PREFERENCE_NAME = "Zytrack_Demo"
-        val IS_LOGIN_PREF_KEY =  preferencesKey<Boolean>("isLogin")
+        val IS_LOGIN_PREF_KEY = preferencesKey<Boolean>("isLogin")
         val USER_PREF_KEY = preferencesKey<String>("userData")
         val CLIENT_PREF_KEY = preferencesKey<String>("client")
         val ACCESS_TOKEN_PREF_KEY = preferencesKey<String>("access_token")
@@ -29,27 +29,27 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext val context: C
         name = PREFERENCE_NAME
     )
 
-    suspend fun clearPreferenceDataStore(response:(Boolean)->Unit){
+    suspend fun clearPreferenceDataStore(response: (Boolean) -> Unit) {
         datastore.edit {
             it.clear()
             response(true)
         }
     }
 
-    suspend fun clearPreferenceDataStoreKey(prefKey: Preferences.Key<Any>){
+    suspend fun clearPreferenceDataStoreKey(prefKey: Preferences.Key<Any>) {
         datastore.edit {
             it.remove(prefKey)
         }
     }
 
-    suspend fun isLogin(isLogin:Boolean,response: (Boolean) -> Unit) {
+    suspend fun isLogin(isLogin: Boolean, response: (Boolean) -> Unit) {
         datastore.edit {
             it[IS_LOGIN_PREF_KEY] = isLogin
             response(true)
         }
     }
 
-    suspend fun headers(token:String,client:String,uid:String) {
+    suspend fun headers(token: String, client: String, uid: String) {
         datastore.edit {
             it[ACCESS_TOKEN_PREF_KEY] = token
             it[CLIENT_PREF_KEY] = client
@@ -57,13 +57,9 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext val context: C
         }
     }
 
-    suspend fun userData(userModel: String?){
-        datastore.edit {
-            datastore.edit {prefrence->
-                userModel?.let {
-                    prefrence[USER_PREF_KEY] = it
-                }
-            }
+    suspend fun userData(userModel: String) {
+        datastore.edit { prefrence ->
+            prefrence[USER_PREF_KEY] = userModel
         }
     }
 
@@ -81,22 +77,14 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext val context: C
             headerMap[UID_KEY] = preference[UID_PREF_KEY] ?: ""
             headerMap[CLIENT_KEY] = preference[CLIENT_PREF_KEY] ?: ""
         }
-//        if (headerMap.isNullOrEmpty()){
-//            headerMap as HashMap<String, String>
-//        }else{
-//            headerMap.filter {
-//                it.value.isNotEmpty()
-//            } as HashMap<String, String>
-//        }
-////       headerMap as HashMap<String, String>
         headerMap.filter {
             it.value.isNotEmpty()
         } as HashMap<String, String>
     }
 
-    suspend fun isLogin():Boolean?{
+    suspend fun isLogin(): Boolean? {
         val preferences = datastore.data.first()
-        return preferences[IS_LOGIN_PREF_KEY] ?:false
+        return preferences[IS_LOGIN_PREF_KEY] ?: false
     }
 
     val isUserLoggedIn: Flow<Boolean> = datastore.data.catch { exception ->
@@ -118,7 +106,7 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext val context: C
 
     val userData: Flow<String?>
         get() = datastore.data.map {
-            val user =  it[USER_PREF_KEY] ?: null
+            val user = it[USER_PREF_KEY] ?: null
             user
         }
 }
