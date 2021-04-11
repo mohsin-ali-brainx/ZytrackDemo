@@ -19,7 +19,6 @@
     <string name="account_blocked">Account Blocked</string>
     <string name="blocked_account_desc">Your account is no longer active, please contact support team for more information.</string>
     <string name="home" translatable="false">Home</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="timer">Timer</string>
     <string name="today_9_feb_2021" translatable="false">Today 9 Feb 2021</string>

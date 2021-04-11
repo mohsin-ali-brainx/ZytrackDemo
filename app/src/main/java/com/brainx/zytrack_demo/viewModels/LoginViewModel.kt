@@ -11,18 +11,19 @@ import androidx.lifecycle.viewModelScope
 import com.brainx.androidbase.models.AppException
 import com.brainx.androidext.ext.enablePasswordVisibility
 import com.brainx.androidext.ext.isValidEmail
-import com.brainx.zytrack_demo.api.SharedPreference
+import com.brainx.androidext.ext.toJson
+import com.brainx.zytrack_demo.sharedPreference.SharedPreference
 import com.brainx.zytrack_demo.base.BaseViewModel
 import com.brainx.zytrack_demo.datastore.PreferenceDataStore
 import com.brainx.zytrack_demo.models.UserModel
 import com.brainx.zytrack_demo.repository.AuthRepository
 import com.brainx.zytrack_demo.utils.ZytrackConstant
+import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class LoginViewModel @ViewModelInject constructor(
-    @ApplicationContext val context: Context,
     private val sharedPreference: SharedPreference,
     private val authRepository: AuthRepository,
     private val preferenceDataStore: PreferenceDataStore,
@@ -55,12 +56,12 @@ class LoginViewModel @ViewModelInject constructor(
 
     fun onLoginClicked(rememberMe: Boolean) {
         if (!isValid()) return
-        signInApi(rememberMe)
+        signInApi()
     }
     //end region
 
     //region private method
-    private fun signInApi(rememberMe: Boolean) {
+    private fun signInApi() {
         var isLogin:Boolean=false
         showProcessingLoader()
         viewModelScope.launch(Dispatchers.IO) {
@@ -73,13 +74,9 @@ class LoginViewModel @ViewModelInject constructor(
                 authRepository.signIn(
                     user, { userModel, status , token, client,uid->
                         if (status) {
-                            if (rememberMe){
-                                isLogin=status
-                            }
+                            isLogin=status
                             setUserDetails(userModel, isLogin, token, client, uid)
-                            isUserLoggedIn.postValue(status)
                         }
-                        hideProcessingLoader()
                     }, {
                         hideProcessingLoader()
                         showErrorMessage(it)
@@ -98,10 +95,6 @@ class LoginViewModel @ViewModelInject constructor(
         uid:String?){
         viewModelScope.launch(Dispatchers.IO) {
             preferenceDataStore.apply {
-                user?.let {
-                    userData(it)
-                }
-                isLogin(isLogin)
                 token?.let {token->
                     client?.let { client->
                         uid?.let { uid->
@@ -109,6 +102,13 @@ class LoginViewModel @ViewModelInject constructor(
                         }
                     }
                 }
+                isLogin(isLogin,{
+                    if (it){
+                        this@LoginViewModel.isUserLoggedIn.postValue(true)
+                        hideProcessingLoader()
+                    }
+                })
+
             }
         }
     }

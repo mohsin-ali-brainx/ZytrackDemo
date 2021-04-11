@@ -50,7 +50,7 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
     private fun isUserLoggedInObservable() {
         mViewModel.isUserLoggedIn.observe(this, {
             if (it) {
-                mViewModel.showSuccessDialog("User LoggedIn")
+                startExtActivity(ProfileActivity::class.java, isFinish = true)
             }
         })
     }

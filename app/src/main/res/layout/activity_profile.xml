@@ -10,10 +10,68 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activates.ProfileActivity">
+        tools:context=".activates.ProfileActivity"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.user.name}"
+            android:fontFamily="@font/brownstd_regular"
+            android:textColor="@color/black_color"
+            android:textSize="@dimen/text_size_16"
+
+             />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.user.uid}"
+            android:fontFamily="@font/brownstd_regular"
+            android:textColor="@color/black_color"
+            android:textSize="@dimen/text_size_16"
+            android:layout_marginTop="@dimen/margin_16"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.user.employee_details.language}"
+            android:fontFamily="@font/brownstd_regular"
+            android:textColor="@color/black_color"
+            android:textSize="@dimen/text_size_16"
+            android:layout_marginTop="@dimen/margin_16"
+            />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginTop="@dimen/margin_32"
+            android:layout_marginBottom="@dimen/margin_16"
+            android:layout_marginEnd="@dimen/margin_16"
+            android:layout_marginStart="@dimen/margin_16"
+            android:onClick="@{(v)->viewModel.logout(v)}"
+            app:cardBackgroundColor="@color/theme_color"
+            app:cardCornerRadius="@dimen/card_corner_10"
+            app:cardElevation="0dp"
+           >
+
+            <TextView
+                android:id="@+id/login_bv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/logout"
+                android:textAllCaps="false"
+                android:textColor="@color/white_color"
+                android:textSize="@dimen/text_size_16" />
+
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
 </layout>

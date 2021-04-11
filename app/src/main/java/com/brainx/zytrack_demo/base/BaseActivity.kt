@@ -4,13 +4,15 @@ import android.os.Bundle
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import com.brainx.zytrack_demo.api.SharedPreference
+import androidx.lifecycle.asLiveData
+import com.brainx.zytrack_demo.sharedPreference.SharedPreference
 import com.brainx.androidext.ext.showToast
 import com.brainx.androidbase.base.BxBaseActivity
 import com.brainx.androidbase.network.stateManager.NetState
 import com.brainx.zytrack_demo.datastore.PreferenceDataStore
 import com.brainx.zytrack_demo.utils.ZytrackConstant
 import com.brainx.zytrack_demo.utils.openDialog
+import com.brainx.zytrack_demo.utils.setHeader
 import javax.inject.Inject
 
 
@@ -21,6 +23,7 @@ abstract class BaseActivity<VM : ViewModel, VB : ViewDataBinding> : BxBaseActivi
     lateinit var sharedPreference: SharedPreference
     @Inject
     lateinit var preferenceDataStore: PreferenceDataStore
+    private var isUserLoggedIn=false
     //endregion
 
     //region LifeCycle
@@ -29,14 +32,27 @@ abstract class BaseActivity<VM : ViewModel, VB : ViewDataBinding> : BxBaseActivi
             errorDialogObserver.observe(this@BaseActivity, this@BaseActivity.errorDialogObserver)
             successDialogObserver.observe(this@BaseActivity, this@BaseActivity.successDialogObserver)
         }
+        setHeader()
+        preferenceDataStore.header.asLiveData().observe(this,headerObserver)
     }
 
     override fun onNetworkStateChanged(netState: NetState) {
         super.onNetworkStateChanged(netState)
         showToast(netState.isSuccess.toString())
     }
+
+    override fun onStart() {
+        super.onStart()
+        preferenceDataStore.header.asLiveData().observe(this,headerObserver)
+    }
     //endregion
     // region call backs
+    val headerObserver = Observer<Map<String,String>> {
+        if (!it.isNullOrEmpty()){
+            setHeader(it)
+        }
+    }
+
     val errorDialogObserver = Observer<String> {
         if (it.trim().isNotEmpty()) {
             ZytrackConstant.apply {
@@ -56,6 +72,12 @@ abstract class BaseActivity<VM : ViewModel, VB : ViewDataBinding> : BxBaseActivi
         }
 
     }
-
+    // end region
+    // region private methods
+    private fun checkUserSession() {
+        preferenceDataStore.isUserLoggedIn.asLiveData().observe(this, {
+            isUserLoggedIn = it
+        })
+    }
     // end region
 }

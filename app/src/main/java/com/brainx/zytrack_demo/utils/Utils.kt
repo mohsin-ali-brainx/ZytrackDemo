@@ -9,17 +9,22 @@ import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.brainx.androidbase.network.NetworkApi
 import com.brainx.zytrack_demo.R
-import com.brainx.zytrack_demo.api.SharedPreference
 
-fun setHeaderFromSharedPreference() {
-
+fun setHeader(headerMap: Map<String, String> = mapOf()) {
     with(ZytrackConstant) {
         NetworkApi.headerMap.apply {
-                if (isEmpty()) {
-                    set(CONTENT_TYPE_KEY, CONTENT_TYPE_VALUE)
-                    set(APP_PLATFORM_KEY, APP_PLATFORM)
-                    set(APP_VERSION_KEY, APP_VERSION)
-                }
+            if (isEmpty()||headerMap.isNullOrEmpty()){
+                set(CONTENT_TYPE_KEY, CONTENT_TYPE_VALUE)
+                set(APP_PLATFORM_KEY, APP_PLATFORM)
+                set(APP_VERSION_KEY, APP_VERSION)
+            }else if(!headerMap.isNullOrEmpty()){
+                set(CONTENT_TYPE_KEY, CONTENT_TYPE_VALUE)
+                set(APP_PLATFORM_KEY, APP_PLATFORM)
+                set(APP_VERSION_KEY, APP_VERSION)
+                set(CLIENT_KEY, headerMap[CLIENT_KEY] ?: "")
+                set(ACCESS_TOKEN_KEY, headerMap[ACCESS_TOKEN_KEY] ?:"")
+                set(UID_KEY, headerMap[UID_KEY] ?: "")
+            }
         }
     }
 }

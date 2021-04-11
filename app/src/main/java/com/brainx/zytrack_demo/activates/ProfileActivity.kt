@@ -2,14 +2,18 @@ package com.brainx.zytrack_demo.activates
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
+import com.brainx.androidext.ext.startExtActivity
 import com.brainx.zytrack_demo.R
 import com.brainx.zytrack_demo.base.BaseActivity
 import com.brainx.zytrack_demo.databinding.ActivityLoginBinding
 import com.brainx.zytrack_demo.databinding.ActivityProfileBinding
+import com.brainx.zytrack_demo.models.UserModel
 import com.brainx.zytrack_demo.viewModels.LoginViewModel
 import com.brainx.zytrack_demo.viewModels.ProfileViewModel
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,8 +31,10 @@ class ProfileActivity : BaseActivity<ProfileViewModel, ActivityProfileBinding>()
     //    end region
     //region private Methods
     private fun init() {
+        mViewModel.requireActivity = this
         setBinding()
         readUserData()
+        logoutObserver()
     }
 
     private fun setBinding(){
@@ -39,10 +45,19 @@ class ProfileActivity : BaseActivity<ProfileViewModel, ActivityProfileBinding>()
 
     private fun readUserData(){
         preferenceDataStore.userData.asLiveData().observe(this,{
-            it?.let {
-                mViewModel.user.set(it)
+            val userModel = Gson().fromJson(it, UserModel::class.java)
+            mViewModel.user.set(userModel)
+        })
+    }
+
+    private fun logoutObserver(){
+        mViewModel.logOutObserver.observe(this,{
+            if (it){
+                startExtActivity(LoginActivity::class.java,isFinishAffinity = true)
             }
         })
     }
     //    end region
+    // region public methods
+    // end region
 }

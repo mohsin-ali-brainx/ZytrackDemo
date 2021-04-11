@@ -3,8 +3,7 @@ package com.brainx.zytrack_demo.repository
 import com.brainx.androidbase.ext.request
 import com.brainx.androidbase.models.AppException
 import com.brainx.androidbase.network.ResultState
-import com.brainx.zytrack_demo.api.SharedPreference
-import com.brainx.zytrack_demo.datastore.PreferenceDataStore
+import com.brainx.zytrack_demo.models.ApiResponse
 import com.brainx.zytrack_demo.models.UserModel
 import com.brainx.zytrack_demo.network.ZYTRACK_SERVICE
 import com.brainx.zytrack_demo.utils.ZytrackConstant.ACCESS_TOKEN_HEADER_KEY
@@ -39,6 +38,30 @@ class AuthRepository @Inject constructor(
                         }
                     }
                 }
+            })
+    }
+
+    suspend fun signOut(
+        responseResult: (ApiResponse?, Boolean) -> Unit,
+        error: (AppException) -> Unit
+    ) {
+        request({
+            ZYTRACK_SERVICE.logout()
+        },
+            { result, headers ->
+                when (result) {
+                    is ResultState.Error ->  {
+                        result.error.apply {
+                            error(this)
+                        }
+                    }
+                    is ResultState.Success ->{
+                        //Can handle Headers here
+                        responseResult(result.data,true)
+                    }
+
+                }
+
             })
     }
 }

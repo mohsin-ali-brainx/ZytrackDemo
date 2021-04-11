@@ -11,7 +11,5 @@ data class EmployeeDetailsModel(
     @SerializedName("work_types")
     @Expose
     var work_type : Map<String,String>?,
-    @Expose
-    @SerializedName("projects") var projects : List<ProjectsModel>
 ): Serializable {
 }
