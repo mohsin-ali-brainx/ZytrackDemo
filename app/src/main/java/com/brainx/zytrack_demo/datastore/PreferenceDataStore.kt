@@ -4,7 +4,11 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.createDataStore
+import com.brainx.zytrack_demo.models.UserModel
 import com.brainx.zytrack_demo.utils.ZytrackConstant
+import com.brainx.zytrack_demo.utils.replaceBrackets
+import com.brainx.zytrack_demo.utils.toJsonString
+import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -58,8 +62,11 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext val context: C
     }
 
     suspend fun userData(userModel: String) {
-        datastore.edit { prefrence ->
-            prefrence[USER_PREF_KEY] = userModel
+        val userData = userModel?.replaceBrackets()
+        userData?.let {
+            datastore.edit { prefrence ->
+                prefrence[USER_PREF_KEY] = it
+            }
         }
     }
 
@@ -104,9 +111,10 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext val context: C
             isLoggedIn
         }
 
-    val userData: Flow<String?>
+    val userData: Flow<UserModel?>
         get() = datastore.data.map {
             val user = it[USER_PREF_KEY] ?: null
-            user
+            val model = Gson().fromJson(user?.toJsonString(), UserModel::class.java)
+            model
         }
 }

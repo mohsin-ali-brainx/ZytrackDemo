@@ -46,8 +46,7 @@ class ProfileActivity : BaseActivity<ProfileViewModel, ActivityProfileBinding>()
 
     private fun readUserData(){
         preferenceDataStore.userData.asLiveData().observe(this,{
-            val userModel = Gson().fromJson(it?.toJsonString(), UserModel::class.java)
-            mViewModel.user.set(userModel)
+            mViewModel.user.set(it)
         })
     }
 

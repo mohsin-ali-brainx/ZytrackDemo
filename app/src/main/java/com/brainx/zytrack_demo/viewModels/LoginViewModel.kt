@@ -110,9 +110,7 @@ class LoginViewModel @ViewModelInject constructor(
                         hideProcessingLoader()
                     }
                 })
-
-                user?.toJson()?.replaceBrackets()?.let { userData(it) }
-
+                user?.toJson()?.let { userData(userModel = it) }
             }
         }
     }
