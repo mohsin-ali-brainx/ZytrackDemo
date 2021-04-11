@@ -46,10 +46,9 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext val context: C
         }
     }
 
-    suspend fun isLogin(isLogin: Boolean, response: (Boolean) -> Unit) {
+    suspend fun isLogin(isLogin: Boolean) {
         datastore.edit {
             it[IS_LOGIN_PREF_KEY] = isLogin
-            response(true)
         }
     }
 

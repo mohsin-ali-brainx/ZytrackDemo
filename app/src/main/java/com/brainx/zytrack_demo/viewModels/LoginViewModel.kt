@@ -77,6 +77,8 @@ class LoginViewModel @ViewModelInject constructor(
                         if (status) {
                             isLogin = status
                             setUserDetails(userModel, isLogin, token, client, uid)
+                            this@LoginViewModel.isUserLoggedIn.postValue(true)
+                            hideProcessingLoader()
                         }
                     }, {
                         hideProcessingLoader()
@@ -104,13 +106,8 @@ class LoginViewModel @ViewModelInject constructor(
                         }
                     }
                 }
-                isLogin(isLogin, {
-                    if (it) {
-                        this@LoginViewModel.isUserLoggedIn.postValue(true)
-                        hideProcessingLoader()
-                    }
-                })
                 user?.toJson()?.let { userData(userModel = it) }
+                isLogin(isLogin)
             }
         }
     }

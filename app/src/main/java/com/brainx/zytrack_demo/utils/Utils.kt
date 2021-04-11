@@ -95,15 +95,12 @@ fun openConfirmationDialog(
 
 fun String?.replaceBrackets():String?{
     var data = this
-    data = data?.replaceFirst("{","")
-    if (data?.endsWith("}")==true){
-        data = data?.substring(0,data?.length-1)+""
+    if (data?.startsWith("{")==true && data?.endsWith("}")==true){
+        data = data?.substring(1,data?.length-1)
     }
     return data
 }
 
 fun String?.toJsonString():String?{
-    var data = "$this}"
-    data = data.replaceFirst("","{")
-    return data
+    return "{$this}"
 }
