@@ -5,7 +5,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.brainx.zytrack_demo.sharedPreference.SharedPreference
 import com.brainx.androidbase.base.BxBaseFragment
-import com.brainx.zytrack_demo.datastore.PreferenceDataStore
+import com.brainx.zytrack_demo.datastore.DataStore
 import javax.inject.Inject
 
 abstract class BaseFragment<VM : ViewModel, VB : ViewDataBinding> : BxBaseFragment<VM, VB>() {
@@ -13,7 +13,7 @@ abstract class BaseFragment<VM : ViewModel, VB : ViewDataBinding> : BxBaseFragme
     @Inject
     lateinit var sharedPreference: SharedPreference
     @Inject
-    lateinit var preferenceDataStore: PreferenceDataStore
+    lateinit var dataStore: DataStore
 
     fun getDialogObserver(): Observer<Any?> {
         val requiredActivity = requireActivity() as BaseActivity<VM, VB>

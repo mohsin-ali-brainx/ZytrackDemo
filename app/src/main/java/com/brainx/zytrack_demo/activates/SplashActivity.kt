@@ -9,7 +9,7 @@ import com.brainx.androidbase.base.BxBaseSplashActivity
 import com.brainx.androidext.ext.startExtActivity
 import com.brainx.zytrack_demo.sharedPreference.SharedPreference
 import com.brainx.zytrack_demo.databinding.ActivitySplashBinding
-import com.brainx.zytrack_demo.datastore.PreferenceDataStore
+import com.brainx.zytrack_demo.datastore.DataStore
 import com.brainx.zytrack_demo.utils.ZytrackConstant.SPLASH_TIME
 import com.brainx.zytrack_demo.utils.setHeader
 import com.brainx.zytrack_demo.viewModels.SplashViewModel
@@ -23,7 +23,7 @@ class SplashActivity : BxBaseSplashActivity<SplashViewModel, ActivitySplashBindi
     lateinit var sharedPreference: SharedPreference
 
     @Inject
-    lateinit var preferenceDataStore: PreferenceDataStore
+    lateinit var dataStore: DataStore
 
     private var isUserLoggedIn = false
 
@@ -39,7 +39,7 @@ class SplashActivity : BxBaseSplashActivity<SplashViewModel, ActivitySplashBindi
 
     override fun customOnCreate(savedInstanceState: Bundle?) {
         setHeader()
-        preferenceDataStore.header.asLiveData().observe(this, headerObserver)
+        dataStore.header.asLiveData().observe(this, headerObserver)
         startSplashTimeOutJob(SPLASH_TIME)
     }
 
@@ -64,7 +64,7 @@ class SplashActivity : BxBaseSplashActivity<SplashViewModel, ActivitySplashBindi
     }
 
     private fun checkUserSession() {
-        preferenceDataStore.isLogin.asLiveData().observe(this@SplashActivity, {
+        dataStore.isLogin.asLiveData().observe(this@SplashActivity, {
             isUserLoggedIn = it
             moveToNewScreen(it)
         })

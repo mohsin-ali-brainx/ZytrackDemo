@@ -1,28 +1,27 @@
 package com.brainx.zytrack_demo.viewModels
 
 import android.app.Activity
-import android.content.Context
 import android.view.View
 import androidx.databinding.ObservableField
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.brainx.zytrack_demo.User
 import com.brainx.zytrack_demo.sharedPreference.SharedPreference
 import com.brainx.zytrack_demo.base.BaseViewModel
-import com.brainx.zytrack_demo.datastore.PreferenceDataStore
+import com.brainx.zytrack_demo.datastore.DataStore
 import com.brainx.zytrack_demo.models.UserModel
 import com.brainx.zytrack_demo.repository.AuthRepository
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ProfileViewModel @ViewModelInject constructor(
     private val sharedPreference: SharedPreference,
     private val authRepository: AuthRepository,
-    private val preferenceDataStore: PreferenceDataStore,
+    private val dataStore: DataStore,
 ) : BaseViewModel() {
     // region public properties
-    var user = ObservableField<UserModel>(UserModel())
+    var user = ObservableField<User>(User.getDefaultInstance())
     var logOutObserver = MutableLiveData<Boolean>()
     lateinit var requireActivity: Activity
     // end region
@@ -42,7 +41,7 @@ class ProfileViewModel @ViewModelInject constructor(
 
     private fun clearPrefs(){
         viewModelScope.launch(Dispatchers.IO) {
-            preferenceDataStore.clearPreferenceDataStore({
+            dataStore.clearPreferenceDataStore({
                 if (it) {
                     logOutObserver.postValue(it)
                     hideProcessingLoader()

@@ -1,20 +1,12 @@
 package com.brainx.zytrack_demo.activates
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.asLiveData
 import com.brainx.androidext.ext.startExtActivity
-import com.brainx.zytrack_demo.R
 import com.brainx.zytrack_demo.base.BaseActivity
-import com.brainx.zytrack_demo.databinding.ActivityLoginBinding
 import com.brainx.zytrack_demo.databinding.ActivityProfileBinding
-import com.brainx.zytrack_demo.models.UserModel
-import com.brainx.zytrack_demo.utils.toJsonString
-import com.brainx.zytrack_demo.viewModels.LoginViewModel
 import com.brainx.zytrack_demo.viewModels.ProfileViewModel
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,7 +37,7 @@ class ProfileActivity : BaseActivity<ProfileViewModel, ActivityProfileBinding>()
     }
 
     private fun readUserData(){
-        preferenceDataStore.userData.asLiveData().observe(this,{
+        dataStore.user.asLiveData().observe(this,{
             mViewModel.user.set(it)
         })
     }

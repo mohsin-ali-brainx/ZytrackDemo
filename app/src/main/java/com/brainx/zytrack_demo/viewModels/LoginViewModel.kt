@@ -1,7 +1,6 @@
 package com.brainx.zytrack_demo.viewModels
 
 import android.app.Activity
-import android.content.Context
 import android.view.View
 import android.widget.EditText
 import androidx.databinding.ObservableBoolean
@@ -11,23 +10,19 @@ import androidx.lifecycle.viewModelScope
 import com.brainx.androidbase.models.AppException
 import com.brainx.androidext.ext.enablePasswordVisibility
 import com.brainx.androidext.ext.isValidEmail
-import com.brainx.androidext.ext.toJson
 import com.brainx.zytrack_demo.sharedPreference.SharedPreference
 import com.brainx.zytrack_demo.base.BaseViewModel
-import com.brainx.zytrack_demo.datastore.PreferenceDataStore
+import com.brainx.zytrack_demo.datastore.DataStore
 import com.brainx.zytrack_demo.models.UserModel
 import com.brainx.zytrack_demo.repository.AuthRepository
 import com.brainx.zytrack_demo.utils.ZytrackConstant
-import com.brainx.zytrack_demo.utils.replaceBrackets
-import com.google.gson.Gson
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class LoginViewModel @ViewModelInject constructor(
     private val sharedPreference: SharedPreference,
     private val authRepository: AuthRepository,
-    private val preferenceDataStore: PreferenceDataStore,
+    private val dataStore: DataStore,
 ) : BaseViewModel() {
     //region public properties
     var email = MutableLiveData<String>()
@@ -98,7 +93,7 @@ class LoginViewModel @ViewModelInject constructor(
         uid: String?
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            preferenceDataStore.apply {
+            dataStore.apply {
                 token?.let { token ->
                     client?.let { client ->
                         uid?.let { uid ->
@@ -106,8 +101,9 @@ class LoginViewModel @ViewModelInject constructor(
                         }
                     }
                 }
-                userData(user)
                 isLogin(isLogin)
+                user(user)
+
             }
         }
     }

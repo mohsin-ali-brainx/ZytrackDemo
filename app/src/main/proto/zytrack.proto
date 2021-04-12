@@ -1,0 +1,17 @@
+syntax = "proto3";
+option java_package = "com.brainx.zytrack_demo";
+option java_multiple_files = true;
+
+message User{
+  int32 id = 1;
+  string name = 2;
+  string uid = 3;
+  EmployeeDetails employee_details = 4;
+}
+
+message EmployeeDetails{
+  string language = 1;
+  map<string,string> work_type=2;
+}
+
+

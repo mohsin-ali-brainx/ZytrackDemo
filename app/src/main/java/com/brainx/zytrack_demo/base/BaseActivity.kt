@@ -9,7 +9,7 @@ import com.brainx.zytrack_demo.sharedPreference.SharedPreference
 import com.brainx.androidext.ext.showToast
 import com.brainx.androidbase.base.BxBaseActivity
 import com.brainx.androidbase.network.stateManager.NetState
-import com.brainx.zytrack_demo.datastore.PreferenceDataStore
+import com.brainx.zytrack_demo.datastore.DataStore
 import com.brainx.zytrack_demo.utils.ZytrackConstant
 import com.brainx.zytrack_demo.utils.openDialog
 import com.brainx.zytrack_demo.utils.setHeader
@@ -22,7 +22,7 @@ abstract class BaseActivity<VM : ViewModel, VB : ViewDataBinding> : BxBaseActivi
     @Inject
     lateinit var sharedPreference: SharedPreference
     @Inject
-    lateinit var preferenceDataStore: PreferenceDataStore
+    lateinit var dataStore: DataStore
     private var isUserLoggedIn=false
     //endregion
 
@@ -33,7 +33,7 @@ abstract class BaseActivity<VM : ViewModel, VB : ViewDataBinding> : BxBaseActivi
             successDialogObserver.observe(this@BaseActivity, this@BaseActivity.successDialogObserver)
         }
         setHeader()
-        preferenceDataStore.header.asLiveData().observe(this,headerObserver)
+        dataStore.header.asLiveData().observe(this,headerObserver)
     }
 
     override fun onNetworkStateChanged(netState: NetState) {
@@ -43,7 +43,7 @@ abstract class BaseActivity<VM : ViewModel, VB : ViewDataBinding> : BxBaseActivi
 
     override fun onStart() {
         super.onStart()
-        preferenceDataStore.header.asLiveData().observe(this,headerObserver)
+        dataStore.header.asLiveData().observe(this,headerObserver)
     }
     //endregion
     // region call backs
@@ -75,7 +75,7 @@ abstract class BaseActivity<VM : ViewModel, VB : ViewDataBinding> : BxBaseActivi
     // end region
     // region private methods
     private fun checkUserSession() {
-        preferenceDataStore.isLogin.asLiveData().observe(this, {
+        dataStore.isLogin.asLiveData().observe(this, {
             isUserLoggedIn = it
         })
     }
