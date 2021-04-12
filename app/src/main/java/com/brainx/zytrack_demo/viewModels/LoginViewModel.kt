@@ -106,7 +106,7 @@ class LoginViewModel @ViewModelInject constructor(
                         }
                     }
                 }
-                user?.toJson()?.let { userData(userModel = it) }
+                userData(user)
                 isLogin(isLogin)
             }
         }

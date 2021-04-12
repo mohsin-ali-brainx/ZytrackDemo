@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
+import com.brainx.androidext.ext.toJson
 import com.brainx.zytrack_demo.models.UserModel
 import com.brainx.zytrack_demo.utils.ZytrackConstant
 import com.brainx.zytrack_demo.utils.replaceBrackets
@@ -91,8 +92,8 @@ class PreferenceDataStore @Inject constructor(@ApplicationContext val context: C
         } as HashMap<String, String>
     }
 
-    suspend fun userData(userModel: String) {
-        val userData = userModel?.replaceBrackets()
+    suspend fun userData(userModel: UserModel?) {
+        val userData = userModel?.toJson()?.replaceBrackets()
         userData?.let {
             context.datastore.edit { prefrence ->
                 prefrence[USER_PREF_KEY] = it
