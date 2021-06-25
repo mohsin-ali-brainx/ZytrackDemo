@@ -97,4 +97,13 @@ object ZytrackConstant {
     var workDuration = MutableLiveData<String>()
     var breakDuration = MutableLiveData<String>()
     var isTempLoggedIn = ObservableField<Boolean>(false)
+
+    const val REQUEST_CODE_CAMERA_PERMISSION = 0
+    const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+    const val TAG = "CameraXExample"
+
+
+    const val ORIGINAL_FILE_KEY = "original_file"
+    const val CROPPED_PHOTO_KEY = "cropped_photo"
+    const val NO_IMAGE_URL = "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
 }

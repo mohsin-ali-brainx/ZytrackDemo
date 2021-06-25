@@ -6,6 +6,8 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/BxAndroidBase/Zytrack_Demo.BxAndroidBase.iml" filepath="$PROJECT_DIR$/.idea/modules/BxAndroidBase/Zytrack_Demo.BxAndroidBase.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/BxAndroidExt/Zytrack_Demo.BxAndroidExt.iml" filepath="$PROJECT_DIR$/.idea/modules/BxAndroidExt/Zytrack_Demo.BxAndroidExt.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Zytrack_Demo.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Zytrack_Demo.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/monscanner/Zytrack_Demo.monscanner.iml" filepath="$PROJECT_DIR$/.idea/modules/monscanner/Zytrack_Demo.monscanner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/opencv/Zytrack_Demo.opencv.iml" filepath="$PROJECT_DIR$/.idea/modules/opencv/Zytrack_Demo.opencv.iml" />
     </modules>
   </component>
 </project>

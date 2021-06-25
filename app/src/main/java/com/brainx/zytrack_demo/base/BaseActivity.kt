@@ -38,7 +38,6 @@ abstract class BaseActivity<VM : ViewModel, VB : ViewDataBinding> : BxBaseActivi
 
     override fun onNetworkStateChanged(netState: NetState) {
         super.onNetworkStateChanged(netState)
-        showToast(netState.isSuccess.toString())
     }
 
     override fun onStart() {

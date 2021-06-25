@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-feature android:name="android.hardware.camera.any" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:name=".base.BaseApp"
         android:allowBackup="false"
@@ -15,18 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zytrack_Demo"
         tools:replace="android:label,android:allowBackup">
-        <activity android:name=".activates.ProfileActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/getStartedTheme"
-            />
-        <activity
-            android:name=".activates.LoginActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/getStartedTheme" />
-        <activity
-            android:name=".activates.SplashActivity"
+        <activity android:name=".activates.ScanDocumentActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/getStartedTheme">
@@ -36,6 +29,41 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activates.CameraViewActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/getStartedTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activates.ProfileActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/getStartedTheme" />
+        <activity
+            android:name=".activates.LoginActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/getStartedTheme" />
+        <activity
+            android:name=".activates.SplashActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/getStartedTheme"/>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.brainx.zytrack_demo.docprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
     </application>
 
 </manifest>

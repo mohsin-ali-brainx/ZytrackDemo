@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Zytrack Demo</string>
+    <string name="app_name">Doc Scanner</string>
     <string name="user_name">User Name:</string>
     <string name="please_enter_full_name">Please enter full name</string>
     <string name="image" translatable="false">image</string>
