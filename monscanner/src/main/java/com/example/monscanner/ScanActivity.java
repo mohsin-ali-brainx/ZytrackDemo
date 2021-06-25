@@ -278,8 +278,8 @@ public class ScanActivity extends AppCompatActivity implements ComponentCallback
             Log.d("SCAN_ACTIVITY_PHOTO_3",uri.toString());
             data.putExtra(ScanActivity.SCAN_RESULT, finalUri);
             setResult(Activity.RESULT_OK, data);
-            original.recycle();
-            clearTempImages();
+//            original.recycle();
+//            clearTempImages();
             System.gc();
             runOnUiThread(new Runnable() {
                 @Override

@@ -8,7 +8,7 @@
         android:name="com.brainx.zytrack_demo.fragments.CameraFragment"
         android:label="CameraFragment" >
         <action
-            android:id="@+id/action_cameraFragment_to_galleryFragment"
+            android:id="@+id/navigateToGallery"
             app:destination="@id/galleryFragment" />
     </fragment>
     <fragment
@@ -16,7 +16,11 @@
         android:name="com.brainx.zytrack_demo.fragments.GalleryFragment"
         android:label="GalleryFragment" >
         <action
-            android:id="@+id/action_galleryFragment_to_cameraFragment"
+            android:id="@+id/navigateToCamera"
             app:destination="@id/cameraFragment" />
+        <argument
+            android:name="showGallery"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
 </navigation>

@@ -1,38 +1,32 @@
 package com.brainx.zytrack_demo.fragments
 
-import android.app.Activity
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import android.view.*
-import android.widget.ImageView
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.core.net.toFile
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import com.brainx.androidext.ext.openSettings
 import com.brainx.androidext.ext.runTimePermissions
-import com.brainx.zytrack_demo.R
 import com.brainx.zytrack_demo.activates.ScanDocumentActivity
 import com.brainx.zytrack_demo.base.BaseFragment
 import com.brainx.zytrack_demo.databinding.FragmentCameraBinding
 import com.brainx.zytrack_demo.utils.*
-import com.brainx.zytrack_demo.utils.ZytrackConstant.NO_IMAGE_URL
 import com.brainx.zytrack_demo.viewModels.ScanDocumentViewModel
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.monscanner.ScanActivity
 import com.example.monscanner.ScanConstants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_camera.*
 import java.io.File
 import java.io.FileNotFoundException
+import java.io.IOException
 import java.io.InputStream
 import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
@@ -44,7 +38,7 @@ typealias LumaListener = (luma: Double) -> Unit
 @AndroidEntryPoint
 class CameraFragment : BaseFragment<ScanDocumentViewModel, FragmentCameraBinding>() {
 
-    private val REQUEST_CODE = 7
+
 
     private var imageCapture: ImageCapture? = null
     private lateinit var cameraExecutor: ExecutorService
@@ -118,21 +112,38 @@ class CameraFragment : BaseFragment<ScanDocumentViewModel, FragmentCameraBinding
 
     fun deleteDirectory(view: View){
         clearTempImages()
+        mViewBinding.ivCapture.setImageBitmap(null)
     }
 
+    fun moveToGallery(view: View){
+        val showGallery = true
+        val action = CameraFragmentDirections.navigateToGallery(showGallery)
+        Navigation.findNavController(mViewBinding.root).navigate(action)
+    }
 
     private fun uriObservable(){
         requiredActivity.apply {
-            mViewModel.imageUri.observe(this, {
-                Navigation.findNavController(mViewBinding.root).navigate(R.id.action_cameraFragment_to_galleryFragment)
-//                Log.d("SCAN_CAMERA_FRAGMENT", "observalble ${it.toString()}")
-//                val resource = it ?: NO_IMAGE_URL
-//                Glide.with(this)
-//                    .setDefaultRequestOptions(RequestOptions())
-//                    .load(resource)
-//                    .into(mViewBinding.ivCapture)
-            })
+            with(mViewModel) {
+               cameraImageUri.observe(this@apply, {
+                    try {
+                        imageFileList.add( mapOf<String,Any?>(ZytrackConstant.ORIGINAL_FILE_KEY to fileObservable.get() as File,
+                            ZytrackConstant.CROPPED_PHOTO_KEY to it as Uri
+                        ))
+                        mViewBinding.ivCapture.setImageBitmap(getBitmap(contentResolver,it))
+                    }catch (e: java.lang.Exception){
+
+                    }
+                })
+            }
         }
+    }
+
+    @Throws(FileNotFoundException::class, IOException::class)
+    fun getBitmap(cr: ContentResolver, url: Uri?): Bitmap {
+        val input: InputStream? = url?.let { cr.openInputStream(it) }
+        val bitmap = BitmapFactory.decodeStream(input)
+        input?.close()
+        return bitmap
     }
 
     private fun takePhoto() {
@@ -160,7 +171,7 @@ class CameraFragment : BaseFragment<ScanDocumentViewModel, FragmentCameraBinding
                 ContextCompat.getMainExecutor(requiredActivity),
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onError(exc: ImageCaptureException) {
-                        mViewModel.showErrorDialog("Photo capture failed: ${exc.message}")
+
                     }
 
                     override fun onImageSaved(output: ImageCapture.OutputFileResults) {
@@ -174,12 +185,8 @@ class CameraFragment : BaseFragment<ScanDocumentViewModel, FragmentCameraBinding
                                 ScanConstants.OPEN_INTENT_PREFERENCE,
                                 ScanConstants.OPEN_CAMERA
                             )
-                            startActivityForResult(intent, REQUEST_CODE)
+                            startActivityForResult(intent, ZytrackConstant.CAMERA_FRAGMENT_CROP_REQUEST_CODE)
                         }
-
-//                        mViewBinding.ivCapture.setImageBitmap(getBitmap(savedUri))
-//                        val msg = "Photo capture succeeded: $savedUri"
-//                        mViewModel.showSuccessDialog(msg)
                     }
                 })
         }
@@ -223,7 +230,7 @@ class CameraFragment : BaseFragment<ScanDocumentViewModel, FragmentCameraBinding
                     )
 
                 } catch (exc: Exception) {
-                    mViewModel.showErrorDialog("Use case binding failed")
+
                 }
 
             }, ContextCompat.getMainExecutor(this))
@@ -243,9 +250,7 @@ class CameraFragment : BaseFragment<ScanDocumentViewModel, FragmentCameraBinding
 
     private fun clearTempImages() {
         try {
-
             val deleted = getOutputDirectory().deleteRecursively()
-            mViewModel.showSuccessDialog(deleted.toString())
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
@@ -297,26 +302,4 @@ class CameraFragment : BaseFragment<ScanDocumentViewModel, FragmentCameraBinding
         orientationEventListener.enable()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        Log.d("SCAN_CAMERA_FRAGMENT", "requestcode:$requestCode and resultcode:$resultCode")
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_CODE) {
-                requiredActivity.apply {
-                    try {
-                        assert(data != null)
-                        val imageUri = Objects.requireNonNull(data!!.extras)!!
-                            .getParcelable<Uri>(ScanActivity.SCAN_RESULT)!!
-                        Log.d("SCAN_CAMERA_FRAGMENT", "${imageUri.toString()}")
-                        val imageStream: InputStream? = contentResolver.openInputStream(imageUri)
-                        val scannedImage = BitmapFactory.decodeStream(imageStream)
-                        contentResolver.delete(imageUri, null, null)
-                        mViewBinding.ivCapture.setImageBitmap(scannedImage)
-                    } catch (e: FileNotFoundException) {
-                        e.printStackTrace()
-                    }
-                }
-            }
-        }
-    }
 }

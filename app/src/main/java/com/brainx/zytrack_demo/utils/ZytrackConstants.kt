@@ -106,4 +106,6 @@ object ZytrackConstant {
     const val ORIGINAL_FILE_KEY = "original_file"
     const val CROPPED_PHOTO_KEY = "cropped_photo"
     const val NO_IMAGE_URL = "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
+    const val CAMERA_FRAGMENT_CROP_REQUEST_CODE = 9001
+    const val GALLERY_FRAGMENT_CROP_REQUEST_CODE = 9002
 }

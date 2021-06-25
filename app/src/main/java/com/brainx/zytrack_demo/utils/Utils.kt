@@ -2,6 +2,7 @@ package com.brainx.zytrack_demo.utils
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.AssetFileDescriptor
@@ -19,7 +20,9 @@ import com.brainx.androidbase.base.BxBaseApp
 import com.brainx.androidbase.network.NetworkApi
 import com.brainx.zytrack_demo.BuildConfig
 import com.brainx.zytrack_demo.R
+import java.io.FileNotFoundException
 import java.io.IOException
+import java.io.InputStream
 
 fun setHeader(headerMap: Map<String, String> = mapOf()) {
     with(ZytrackConstant) {
@@ -176,4 +179,12 @@ fun getBitmap(selectedImg: Uri): Bitmap? {
     return BitmapFactory.decodeFileDescriptor(
         fileDescriptor?.fileDescriptor, null, options
     )
+}
+
+@Throws(FileNotFoundException::class, IOException::class)
+fun getBitmap(cr: ContentResolver, url: Uri?): Bitmap {
+    val input: InputStream? = url?.let { cr.openInputStream(it) }
+    val bitmap = BitmapFactory.decodeStream(input)
+    input?.close()
+    return bitmap
 }
