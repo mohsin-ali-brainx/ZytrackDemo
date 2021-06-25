@@ -10,6 +10,7 @@ import com.brainx.zytrack_demo.utils.ZytrackConstant
 import com.brainx.zytrack_demo.viewModels.ScanDocumentViewModel
 import com.example.monscanner.ScanActivity
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 import java.io.FileNotFoundException
 
 @AndroidEntryPoint
@@ -39,7 +40,7 @@ class ScanDocumentActivity : BaseActivity<ScanDocumentViewModel, ActivityScanDoc
         mViewModel.apply {
             with(ZytrackConstant){
                 try {
-                    val imageUri =  data?.extras?.getParcelable<Uri>(ScanActivity.SCAN_RESULT)
+                    val imageUri =  data?.extras?.getSerializable(ScanActivity.SCAN_RESULT) as File
                     imageUri?.let {
                         when(requestCode){
                             CAMERA_FRAGMENT_CROP_REQUEST_CODE-> cameraImageUri.postValue(it)

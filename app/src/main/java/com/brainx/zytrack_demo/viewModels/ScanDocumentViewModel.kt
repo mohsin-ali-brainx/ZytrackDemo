@@ -17,6 +17,6 @@ class ScanDocumentViewModel @ViewModelInject constructor(
 ) : BaseViewModel() {
     var fileObservable = ObservableField<File>()
     var imageFileList = arrayListOf<Map<String,Any?>>()
-    var cameraImageUri = MutableLiveData<Uri>()
-    var galleryImageUri = MutableLiveData<Uri>()
+    var cameraImageUri = MutableLiveData<File>()
+    var galleryImageUri = MutableLiveData<File>()
 }

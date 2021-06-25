@@ -273,12 +273,15 @@ public class ScanActivity extends AppCompatActivity implements ComponentCallback
             original = Bitmap.createBitmap(original, 0, 0, original.getWidth(), original.getHeight(), new Matrix(), true);
             Utils.bitmapToMat(original,new Mat());
 
-            Uri finalUri = getUri(this, original);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            original.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+
+//            Uri finalUri = getUri(this, original);
             Intent data = new Intent();
             Log.d("SCAN_ACTIVITY_PHOTO_3",uri.toString());
-            data.putExtra(ScanActivity.SCAN_RESULT, finalUri);
+            data.putExtra(ScanActivity.SCAN_RESULT, file);
             setResult(Activity.RESULT_OK, data);
-//            original.recycle();
 //            clearTempImages();
             System.gc();
             runOnUiThread(new Runnable() {

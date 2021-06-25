@@ -108,7 +108,7 @@ class GalleryFragment : BaseFragment<ScanDocumentViewModel, FragmentGalleryBindi
                     try {
                         val previousMap = viewPagerAdapter.getPhotoList()[currentPosition]
                         val map = mapOf<String,Any?>(ZytrackConstant.ORIGINAL_FILE_KEY to previousMap[ZytrackConstant.ORIGINAL_FILE_KEY] as File,
-                            ZytrackConstant.CROPPED_PHOTO_KEY to it as Uri
+                            ZytrackConstant.CROPPED_PHOTO_KEY to it as File
                         )
                         viewPagerAdapter.updateList(currentPosition,map)
                         imageFileList.apply {

@@ -2,6 +2,7 @@ package com.brainx.zytrack_demo.viewholders
 
 import android.content.Context
 import android.net.Uri
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -10,12 +11,13 @@ import com.brainx.zytrack_demo.R
 import com.brainx.zytrack_demo.databinding.GalleryItemLayoutBinding
 import com.brainx.zytrack_demo.utils.ZytrackConstant
 import com.brainx.zytrack_demo.utils.getBitmap
+import java.io.File
 
 class GalleryViewHolder(val itemBinding:GalleryItemLayoutBinding) :RecyclerView.ViewHolder(itemBinding.root) {
 
     fun bind(position: Int,context : Context, map: Map<String,Any?>) {
         itemBinding.apply {
-            ivPhoto.setImageBitmap(getBitmap(context.contentResolver,map[ZytrackConstant.CROPPED_PHOTO_KEY] as Uri))
+            ivPhoto.setImageBitmap(MediaStore.Images.Media.getBitmap(context.contentResolver, Uri.fromFile(map[ZytrackConstant.CROPPED_PHOTO_KEY] as File)))
             executePendingBindings()
         }
     }

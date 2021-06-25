@@ -38,6 +38,7 @@ import org.opencv.imgproc.Imgproc;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -433,8 +434,10 @@ public class ShapeValidationFragment extends Fragment {
         Mat transmtx = Imgproc.getPerspectiveTransform(mimg, mdst);
         // apply perspective transformation
         Imgproc.warpPerspective(src, dst, transmtx, dst.size());
-
-        Imgcodecs.imwrite(folder.getAbsolutePath()+"/scanned.jpg", dst);
+        Calendar c = Calendar.getInstance();
+        String time = Long.toString(c.getTimeInMillis());
+        ScanConstants.SCANNED_FILE_NAME = "/scanned"+time+".jpg";
+        Imgcodecs.imwrite(folder.getAbsolutePath()+ScanConstants.SCANNED_FILE_NAME, dst);
     }
 
     // fait apparaitre le dialogue d'attente
@@ -475,7 +478,7 @@ public class ShapeValidationFragment extends Fragment {
                         y3 = Objects.requireNonNull(pts.get(2)).y * rapport;
                         y4 = Objects.requireNonNull(pts.get(3)).y * rapport;
                         scan(src, x1, y1, x2, y2, x3, y3, x4, y4);
-                        scanner.onScanFinish(Uri.parse(folder.getPath() + "/scanned.jpg"));
+                        scanner.onScanFinish(Uri.parse(folder.getPath() + ScanConstants.SCANNED_FILE_NAME));
                         dismissDialog();
                     }
                 });

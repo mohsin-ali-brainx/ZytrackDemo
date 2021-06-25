@@ -23,4 +23,5 @@ public abstract class ScanConstants {
     public static final String ORIGINAL_FILE = "original_photo_file";
     public static File PHOTO_FILE = null;
     public static ContentResolver contentResolver = null;
+    public static String SCANNED_FILE_NAME = null;
 }

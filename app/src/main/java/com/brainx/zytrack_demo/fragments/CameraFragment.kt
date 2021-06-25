@@ -5,8 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.*
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -98,6 +100,11 @@ class CameraFragment : BaseFragment<ScanDocumentViewModel, FragmentCameraBinding
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        startCamera()
+    }
+
     private fun openCamera(){
         if (checkCameraPermission(requiredActivity)){
             return
@@ -125,15 +132,19 @@ class CameraFragment : BaseFragment<ScanDocumentViewModel, FragmentCameraBinding
         requiredActivity.apply {
             with(mViewModel) {
                cameraImageUri.observe(this@apply, {
-                    try {
-                        imageFileList.add( mapOf<String,Any?>(ZytrackConstant.ORIGINAL_FILE_KEY to fileObservable.get() as File,
-                            ZytrackConstant.CROPPED_PHOTO_KEY to it as Uri
-                        ))
-                        mViewBinding.ivCapture.setImageBitmap(getBitmap(contentResolver,it))
-                    }catch (e: java.lang.Exception){
+                   try {
+                       imageFileList.add(
+                           mapOf<String, Any?>(
+                               ZytrackConstant.ORIGINAL_FILE_KEY to fileObservable.get() as File,
+                               ZytrackConstant.CROPPED_PHOTO_KEY to it as File
+                           )
+                       )
+                       var original = MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(it))
+                       mViewBinding.ivCapture.setImageBitmap(original)
+                   } catch (e: java.lang.Exception) {
 
-                    }
-                })
+                   }
+               })
             }
         }
     }
@@ -185,7 +196,10 @@ class CameraFragment : BaseFragment<ScanDocumentViewModel, FragmentCameraBinding
                                 ScanConstants.OPEN_INTENT_PREFERENCE,
                                 ScanConstants.OPEN_CAMERA
                             )
-                            startActivityForResult(intent, ZytrackConstant.CAMERA_FRAGMENT_CROP_REQUEST_CODE)
+                            startActivityForResult(
+                                intent,
+                                ZytrackConstant.CAMERA_FRAGMENT_CROP_REQUEST_CODE
+                            )
                         }
                     }
                 })
